@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Add Comment | {{ post.title }}
+{% endblock title %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-6-desktop is-8-tablet">
+                <div class="box">
+                    <h2 class="title is-4 has-text-centered">Add a Comment</h2>
+                    <p class="subtitle is-6 has-text-centered has-text-grey">
+                        For: <strong>{{ post.title }}</strong>
+                    </p>
+
+                    {% if error %}
+                        <div class="notification is-danger is-light">
+                            {{ error }}
+                        </div>
+                    {% endif %}
+
+                    {% if sentiment_result %}
+                        <div class="notification 
+                            {% if sentiment_result.label == 'POSITIVE' %}is-success
+                            {% elif sentiment_result.label == 'NEGATIVE' %}is-danger
+                            {% else %}is-info
+                            {% endif %} 
+                            is-light has-text-centered">
+                            <strong>Sentiment:</strong> {{ sentiment_result.label }} 
+                            (Confidence: {{ sentiment_result.score }}%)
+                        </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="field">
+                            <label class="label">Your Comment</label>
+                            <div class="control">
+                                {{ form.text|add_class:"textarea" }}
+                            </div>
+                            {% if form.text.errors %}
+                                <p class="help is-danger">{{ form.text.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="field is-grouped is-justify-content-space-between mt-4">
+                            <div class="control">
+                                <button type="submit" name="check_sentiment" class="button is-info is-light">
+                                    Check Sentiment
+                                </button>
+                            </div>
+
+                            {% if sentiment_result %}
+                            <div class="control">
+                                <button type="submit" name="submit_comment" class="button is-link">
+                                    Submit Comment
+                                </button>
+                            </div>
+                            {% endif %}
+
+                            <div class="control">
+                                <a href="{{ post.get_absolute_url }}" class="button is-light">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

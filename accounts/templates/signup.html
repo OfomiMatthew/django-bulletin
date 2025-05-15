@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sign Up
+{% endblock title %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="has-text-centered mb-5">
+            <h1 class="title">Sign Up</h1>
+          
+        </div>
+        
+        <!-- Form Section -->
+        <div class="columns is-centered">
+            <div class="column is-6-tablet is-4-desktop">
+                <div class="box">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <!-- Loop through fields dynamically -->
+                        {% for field in form %}
+                            <div class="field">
+                                <label class="label">{{ field.label }}</label>
+                                <div class="control has-icons-left">
+                                    {{ field }}
+                                    <span class="icon is-small is-left">
+                                        {% if field.field.widget.input_type == "text" %}
+                                            <i class="fas fa-user"></i>
+                                        {% elif field.field.widget.input_type == "password" %}
+                                            <i class="fas fa-lock"></i>
+                                        {% elif field.field.widget.input_type == "email" %}
+                                            <i class="fas fa-envelope"></i>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                {% if field.errors %}
+                                    <p class="help is-danger">{{ field.errors|join:", " }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <!-- Sign-Up Button -->
+                        <div class="field mt-5">
+                            <button class="button is-primary is-fullwidth">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Login Link -->
+                <p class="has-text-centered mt-4">
+                    Already have an account? 
+                    <a href="{% url 'login' %}">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Create Post{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 800px;">
+    <div class="box p-5 has-background-light">
+        <h1 class="title has-text-centered mb-6">Create a New Post</h1>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Title Field -->
+            <div class="field">
+                <label class="label has-text-weight-semibold">{{ form.title.label }}</label>
+                <div class="control">
+                    {% render_field form.title class="input" placeholder="Enter post title" %}
+                </div>
+                {% if form.title.errors %}
+                    <p class="help is-danger">{{ form.title.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Content Field -->
+            <div class="field">
+                <label class="label has-text-weight-semibold">{{ form.content.label }}</label>
+                <div class="control">
+                    {% render_field form.content class="textarea " rows="8" cols="100" placeholder="Write your post content here..." %}
+                </div>
+                {% if form.content.errors %}
+                    <p class="help is-danger">{{ form.content.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Category and Tags Fields -->
+            <div class="columns">
+                <div class="column">
+                    <!-- Category Field -->
+                    <div class="field">
+                        <label class="label has-text-weight-semibold">{{ form.category.label }}</label>
+                        <div class="control">
+                            <div class="select is-fullwidth">
+                                {% render_field form.category class="is-medium" %}
+                            </div>
+                        </div>
+                        {% if form.category.errors %}
+                            <p class="help is-danger">{{ form.category.errors }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="column">
+                    <!-- Tags Field -->
+                    <div class="field">
+                        <label class="label has-text-weight-semibold">{{ form.tags.label }}</label>
+                        <div class="control">
+                            <div class="select is-multiple is-fullwidth">
+                                {% render_field form.tags class="is-medium" %}
+                            </div>
+                        </div>
+                        <p class="help">Hold down "Control" or "Command" to select multiple options</p>
+                        {% if form.tags.errors %}
+                            <p class="help is-danger">{{ form.tags.errors }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Picture Upload Field -->
+            <div class="field">
+                <label class="label has-text-weight-semibold">{{ form.picture.label }}</label>
+                <div class="file has-name is-boxed is-light">
+                    <label class="file-label">
+                        {% render_field form.picture class="file-input" id="file-upload" %}
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">Choose a file…</span>
+                        </span>
+                        <span class="file-name" id="file-name">No file selected</span>
+                    </label>
+                </div>
+                {% if form.picture.errors %}
+                    <p class="help is-danger">{{ form.picture.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="field mt-6">
+                <div class="control has-text-centered">
+                    <button type="submit" class="button is-primary px-3">
+                        <span class="icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </span>
+                        <span>Publish Post</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Back to Home Link -->
+        <div class="has-text-centered mt-5">
+            <a href="/" class="button is-light">
+                <span class="icon">
+                    <i class="fas fa-arrow-left"></i>
+                </span>
+                <span>Back to Home</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Display the selected filename
+    document.getElementById('file-upload').onchange = function() {
+        const fileName = this.files[0] ? this.files[0].name : "No file selected";
+        document.getElementById('file-name').textContent = fileName;
+    };
+</script>
+
+<style>
+    .box {
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+    
+    .textarea {
+        min-height: 200px;
+    }
+    
+    .select:not(.is-multiple):not(.is-loading)::after {
+        border-color: #4a4a4a;
+    }
+    
+    .file-input:hover {
+        cursor: pointer;
+    }
+    
+    .file-name {
+        max-width: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+{% endblock %}

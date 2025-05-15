@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Login
+{% endblock title %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <!-- Page Header -->
+        <h1 class="title has-text-centered">Login</h1>
+        
+        
+        <div class="columns is-centered">
+            <div class="column is-4">
+                <div class="box">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <!-- Username Field -->
+                        <div class="field">
+                            <label class="label">Username</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" name="username" placeholder="Enter your username" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Password Field -->
+                        <div class="field">
+                            <label class="label">Password</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="password" name="password" placeholder="Enter your password" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Error Messages -->
+                        {% if form.errors %}
+                            <div class="help is-danger">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Login Button -->
+                        <div class="field">
+                            <button type="submit" class="button is-primary is-fullwidth">Login</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Sign Up Link -->
+                <p class="has-text-centered mt-4">
+                    Don't have an account? 
+                    <a href="{% url 'signup' %}">Sign up</a>
+                </p>
+                <p class="has-text-centered mt-4">
+                   Forgot Password? 
+                    <a href="{% url 'password-reset' %}">Reset Password</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

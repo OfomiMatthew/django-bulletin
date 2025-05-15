@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Home
+{% endblock title %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <!-- Page Header -->
+       
+        
+        <div class="columns">
+            <!-- Sidebar for Category Filter -->
+            <div class="column is-3">
+                <aside class="menu">
+                    <p class="menu-label">Filter by Category</p>
+                    <ul class="menu-list">
+                        <li>
+                            <div class="select is-fullwidth">
+                                <form method="get" action=".">
+                                    <select name="category" onchange="this.form.submit()">
+                                        <option value="">All Categories</option>
+                                        {% for category in categories %}
+                                        <option value="{{ category.slug }}" 
+                                                {% if category.slug == request.GET.category %}selected{% endif %}>
+                                            {{ category.title }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </aside>
+            </div>
+
+            <!-- Posts Section -->
+            <div class="column is-9">
+                <div class="columns is-multiline">
+                    {% for post in page_obj %}
+                    <div class="column is-4">
+                        <div class="card">
+                            <!-- Post Image -->
+                            <div class="card-image">
+                                <figure class="image is-4by3">
+                                    {% if post.picture %}
+                                    <img src="{{ post.picture.url }}" alt="Post Image">
+                                
+                                    {% endif %}
+                                </figure>
+                            </div>
+
+                            <!-- Post Content -->
+                            <div class="card-content">
+                                <div class="media">
+                                    <div class="media-content">
+                                        <p class="title is-5">{{ post.title }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="content">
+                                    {{ post.content|truncatechars:100|safe }}
+                                   
+                                    <time datetime="{{ post.created_at|date:'Y-m-d' }}">
+                                        {{ post.created_at|date:'F j, Y' }}
+                                    </time>
+                                </div>
+                            </div>
+
+                            <!-- Card Footer -->
+                            <footer class="card-footer">
+                                <a href="{{ post.get_absolute_url }}" class="card-footer-item">Read More</a>
+                            </footer>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+               <!-- Pagination -->
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    <div class="buttons has-addons is-centered">
+        {% if page_obj.has_previous %}
+        <a class="button is-light" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <a class="button is-light" href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+</nav>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ posts.title }}
+{% endblock title %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <!-- Post Details Section -->
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <!-- Post Title -->
+                <h1 class="title is-2 has-text-centered">{{ posts.title }}</h1>
+                
+                <!-- Post Metadata -->
+                <p class="has-text-centered has-text-grey">
+                    <span>Published on {{ posts.publication_date|date:'F j, Y' }}</span>
+                    {% if posts.tags.exists %}
+                    | Tags: 
+                    {% for tag in posts.tags.all %}
+                    <a href="{{ tags.get_absolute_url }}" class="tag is-link">{{ tag.title }}</a>
+                    {% endfor %}
+                    {% endif %}
+                </p>
+
+                <!-- Post Image -->
+                {% if posts.picture %}
+                <figure class="image is-4by3">
+                    <img src="{{ posts.picture.url }}" alt="{{ posts.title }}">
+                </figure>
+               
+                {% endif %}
+
+                <form id="favorite-form" action="" method="post">
+                    {% csrf_token %}
+                    <a onclick="document.getElementById('favorite-form').submit();" 
+                       class="button is-small {% if is_favorite %}is-danger{% else %}is-success{% endif %}">
+                        <span>{% if is_favorite %}Unfavorite{% else %}Favorite{% endif %}</span>
+                    </a>
+                </form>
+                
+
+                <!-- Post Content -->
+                <div class="content mt-5">
+                    {{ posts.content| safe }}
+                </div>
+
+               
+          <!-- Comment Section -->
+<div class="box mt-6">
+    <h2 class="title is-4">Comments</h2>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'create-comment' posts.slug %}" class="button is-link mb-4">Add Comment</a>
+    {% else %}
+        <p class="has-text-grey">Login to post a comment.</p>
+    {% endif %}
+
+    <div class="comments-list">
+        {% for comment in comments %}
+            <article class="media mb-4">
+                <div class="media-content">
+                    <div class="content">
+                        <p>
+                            <strong>{{ comment.user.username }}</strong>
+                            <small>{{ comment.created|date:"F j, Y H:i" }}</small>
+                            <br>
+                            {{ comment.text }}
+
+                            
+                            {% if user.is_authenticated and user == comment.user %}
+                                <div>
+                                    <a href="{% url 'update-comment' comment.id %}" class="button is-small is-info">Edit</a>
+                                    <a href="{% url 'delete-comment' comment.id %}" class="button is-small is-danger">Delete</a>
+                                </div>
+                            {% endif %}
+                                
+                        </p>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <p class="has-text-grey">No comments yet. Be the first to comment!</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+                <!-- Navigation Buttons -->
+                <div class="buttons mt-5">
+                    <a href="{% url 'index' %}" class="button is-light">Back to Home</a>
+                    {% if posts.category %}
+                    <a href="{{ bulletins.category.get_absolute_url }}" class="button is-primary">
+                        More from {{ posts.category.title }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Posts Section -->
+        <hr>
+        <!-- Related Posts Section -->
+<hr>
+<div class="columns">
+    <div class="column">
+        <h2 class="title is-4">Related Posts</h2>
+        <div class="columns is-multiline">
+            {% for related_post in related_posts %}
+            <div class="column is-3">
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            {% if related_post.picture %}
+                            <img src="{{ related_post.picture.url }}" alt="Related Post Image">
+                           
+                            {% endif %}
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title is-5">{{ related_post.title }}</p>
+                        <a href="{{ related_post.get_absolute_url }}" class="button is-link is-small">
+                            Read More
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    </div>
+</section>
+{% endblock content %}
+
+

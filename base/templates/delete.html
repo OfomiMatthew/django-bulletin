@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Delete Comment
+{% endblock title %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-6">
+                <div class="box has-text-centered">
+                    <h2 class="title is-4 has-text-dark">Confirm Deletion</h2>
+                    <p class="mb-4">Are you sure you want to delete:</p>
+                    <p class="has-text-weight-semibold has-text-grey-dark mb-5">"{{ obj }}"</p>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{form}}
+                        <div class="buttons is-centered">
+                            <a href="{{ request.META.HTTP_REFERER }}" class="button is-light">Cancel</a>
+                            <button type="submit" class="button is-danger">Confirm Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

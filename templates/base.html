@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        {% endblock title %}
+    </title>
+    
+    <!-- Bulma CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+    <!-- Google Font: Poppins -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+   
+    <style>
+        /* Apply Poppins as the default font */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+    </style>
+</head>
+<body>
+   {% include 'navbar.html' %}
+   
+   {% if messages %}
+   <section class="section pt-4 pb-0">
+       <div class="container">
+           {% for message in messages %}
+               <div class="notification 
+                           {% if message.tags == 'error' %}is-danger
+                           {% elif message.tags == 'success' %}is-success
+                           {% elif message.tags == 'warning' %}is-warning
+                           {% elif message.tags == 'info' %}is-info
+                           {% else %}is-light{% endif %}">
+                   <button class="delete"></button>
+                   {{ message }}
+               </div>
+           {% endfor %}
+       </div>
+   </section>
+   {% endif %}
+   
+    
+   {% block content %}
+   {% endblock content %}
+
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const notifications = document.querySelectorAll('.notification');
+    
+        notifications.forEach((notification) => {
+            // Dismiss after 4 seconds
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 1000); // remove after fade
+            }, 4000);
+    
+            // Close when 'X' is clicked
+            const deleteBtn = notification.querySelector('.delete');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', () => {
+                    notification.remove();
+                });
+            }
+        });
+    });
+    </script>
+    
+</body>
+</html>
+
+

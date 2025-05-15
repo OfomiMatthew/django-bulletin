@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ profile.user.username }}'s Profile
+{% endblock title %}
+
+{% block content %}
+<div class="section">
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <div class="box has-text-centered">
+                    <!-- Profile Picture -->
+                    <figure class="image is-128x128 is-inline-block">
+                        {% if profile.picture %}
+                            <img class="is-rounded" src="{{ profile.picture.url }}" alt="{{ profile.user.username }}" style="width: 128px; height: 128px; object-fit: cover;">
+                       
+                        {% endif %}
+                    </figure>
+                    <h1 class="title is-4 mt-4">{{ profile.user.username }}</h1>
+                    <p class="subtitle is-6">{{ profile.bio|default:"No bio added yet." }}</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <div class="box">
+                    <h2 class="title is-4">Edit Profile</h2>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- User Form Fields -->
+                        <div class="field">
+                            <label class="label">Username</label>
+                            <div class="control">
+                                {{ user_form.username }}
+                            </div>
+                            {% if user_form.username.errors %}
+                                <p class="help is-danger">{{ user_form.username.errors }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control">
+                                {{ user_form.email }}
+                            </div>
+                            {% if user_form.email.errors %}
+                                <p class="help is-danger">{{ user_form.email.errors }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Profile Form Fields -->
+                        <div class="field">
+                            <label class="label">Bio</label>
+                            <div class="control">
+                                {{ profile_form.bio }}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Profile Picture</label>
+                            <div class="control">
+                                {{ profile_form.picture }}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button type="submit" class="button is-primary">Update Profile</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <!-- Profile Content -->
+        <div class="columns is-centered mt-6">
+            <div class="column is-half">
+                <div class="box">
+                    <!-- Favorite Posts -->
+                    <h3 class="title is-5">Favorite Posts</h3>
+                    <hr>
+                    {% if profile.favorite_posts.exists %}
+                        <ul>
+                            {% for post in posts.all %}
+                                <li>
+                                    <a href="{{ post.get_absolute_url }}" class="has-text-link">
+                                        {{ post.title }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="has-text-grey">No favorite posts yet.</p>
+                    {% endif %}
+                </div>
+                <div class="box">
+                    <!-- Profile Info -->
+                    <p class="has-text-grey-dark"><strong>Joined:</strong> {{ profile.created|date:"F j, Y" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+    

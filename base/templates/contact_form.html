@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block title %}
+    Contact Us
+{% endblock title %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <!-- Page Header -->
+        <h1 class="title has-text-centered">Contact Us</h1>
+        <p class="subtitle has-text-centered">We would love to hear from you. Please fill out the form below.</p>
+        
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <div class="box">
+                    <!-- Display form -->
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <!-- Django Form Fields -->
+                        <div class="field">
+                            <label class="label" for="id_name">Name</label>
+                            <div class="control">
+                                {{ form.name|add_class:"input" }}
+                            </div>
+                            {% if form.name.errors %}
+                            <p class="help is-danger">{{ form.name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="field">
+                            <label class="label" for="id_email">Email</label>
+                            <div class="control">
+                                {{ form.email|add_class:"input" }}
+                            </div>
+                            {% if form.email.errors %}
+                            <p class="help is-danger">{{ form.email.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="field">
+                            <label class="label" for="id_message">Message</label>
+                            <div class="control">
+                                {{ form.message|add_class:"textarea" }}
+                            </div>
+                            {% if form.message.errors %}
+                            <p class="help is-danger">{{ form.message.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="field is-grouped is-justify-content-center">
+                            <div class="control">
+                                <button type="submit" class="button is-primary">Submit</button>
+                            </div>
+                            <div class="control">
+                                <a href="{% url 'index' %}" class="button is-link is-light">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

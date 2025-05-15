@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Update Comment | {{ post.title }}
+{% endblock title %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-6-desktop is-8-tablet">
+                <div class="box">
+                    <h2 class="title is-4 has-text-centered">Edit Your Comment</h2>
+                    <p class="subtitle is-6 has-text-centered has-text-grey">
+                        On: <strong>{{ comment.post.title }}</strong> by {{ comment.post.author.username }}
+                    </p>
+
+                    {% if error %}
+                        <div class="notification is-danger is-light">
+                            {{ error }}
+                        </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="field">
+                            <label class="label">Edit Comment</label>
+                            <div class="control">
+                                {{ form.text|add_class:"textarea" }}
+                            </div>
+                            {% if form.text.errors %}
+                                <p class="help is-danger">{{ form.text.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="field is-grouped is-justify-content-end mt-4">
+                            <div class="control">
+                                <button type="submit" class="button is-info">Update Comment</button>
+                            </div>
+                            <div class="control">
+                                <a href="{{ comment.post.get_absolute_url }}" class="button is-light">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

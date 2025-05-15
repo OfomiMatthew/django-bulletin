@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock title %}
+
+{% block content %}
+<div class="section">
+    <div class="container">
+        <!-- Iterate Over Posts -->
+        <div class="columns is-multiline is-centered">
+            {% for post in posts %}
+            <div class="column is-8-desktop is-10-tablet is-full-mobile">
+                <div class="card">
+                    <!-- Card Header -->
+                    <header class="card-header">
+                        <p class="card-header-title is-centered">
+                            {{ post.title }}
+                        </p>
+                    </header>
+
+                    <!-- Card Content -->
+                    <div class="card-content">
+                        <div class="content">
+                            <p>{{ post.content|truncatechars:100 }}</p>
+                            <br>
+                            <time class="has-text-grey" datetime="{{ post.created_at|date:'Y-m-d' }}">
+                                {{ post.created_at|date:'F j, Y' }}
+                            </time>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer -->
+                    <footer class="card-footer">
+                        <a href="{{ post.get_absolute_url }}" class="card-footer-item has-text-primary">
+                            Read More
+                        </a>
+                    </footer>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
