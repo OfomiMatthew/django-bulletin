@@ -5,11 +5,34 @@
 {% endblock title %}
 
 {% block content %}
-<section class="section">
+
+<!-- 🌟 Hero Section -->
+<!-- 🌌 Hero Section with Gradient Overlay and AI-Generated Background -->
+<section class="hero is-fullheight" style="
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
+              url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1600&q=80') center center / cover no-repeat;
+">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title has-text-white is-1">
+        Welcome to BulletinBoard
+      </h1>
+      <p class="subtitle has-text-white-ter is-4">
+        Share your thoughts, ideas, and updates with the community.
+      </p>
+      <a href="#posts" class="button is-primary is-medium mt-4">
+        Explore Posts
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- 📬 Main Section (Your existing content) -->
+<section class="section" id="posts">
     <div class="container">
-        <!-- Page Header -->
-       
-        
+
         <div class="columns">
             <!-- Sidebar for Category Filter -->
             <div class="column is-3">
@@ -46,7 +69,6 @@
                                 <figure class="image is-4by3">
                                     {% if post.picture %}
                                     <img src="{{ post.picture.url }}" alt="Post Image">
-                                
                                     {% endif %}
                                 </figure>
                             </div>
@@ -61,7 +83,7 @@
 
                                 <div class="content">
                                     {{ post.content|truncatechars:100|safe }}
-                                   
+                                    <br>
                                     <time datetime="{{ post.created_at|date:'Y-m-d' }}">
                                         {{ post.created_at|date:'F j, Y' }}
                                     </time>
@@ -78,20 +100,20 @@
                 </div>
 
                 <!-- Pagination -->
-               <!-- Pagination -->
-<nav class="pagination is-centered" role="navigation" aria-label="pagination">
-    <div class="buttons has-addons is-centered">
-        {% if page_obj.has_previous %}
-        <a class="button is-light" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
-        {% if page_obj.has_next %}
-        <a class="button is-light" href="?page={{ page_obj.next_page_number }}">Next</a>
-        {% endif %}
-    </div>
-</nav>
+                <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                    <div class="buttons has-addons is-centered">
+                        {% if page_obj.has_previous %}
+                        <a class="button is-light" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        {% endif %}
+                        {% if page_obj.has_next %}
+                        <a class="button is-light" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        {% endif %}
+                    </div>
+                </nav>
 
             </div>
         </div>
     </div>
 </section>
+
 {% endblock content %}
